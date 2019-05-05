@@ -6,6 +6,7 @@ import thunk from "redux-thunk";
 import Home from "./containers/Home";
 import * as serviceWorker from "./serviceWorker";
 import reducers from "./reducers";
+import "./style/index.css";
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
