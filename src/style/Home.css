@@ -246,10 +246,29 @@
 
 /* repsonsive */
 @media screen and (max-width: 767px) {
+  .logo-container img {
+    height: 30px;
+  }
   .content-wrapper {
-    padding: 0.5rem;
+    padding: 0rem;
+  }
+  .search-form {
+    padding-top: 30px;
   }
   .search-form .search-input {
-    min-width: 250px;
+    min-width: 220px;
+  }
+  .btn {
+    min-width: 80px;
+  }
+  .card .card-body {
+    padding: 0.88rem 0.81rem;
+  }
+  .content .files .item {
+    flex-flow: row wrap;
+  }
+  .gist-details .avatar {
+    width: 35px;
+    height: 35px;
   }
 }
