@@ -95,3 +95,14 @@ img {
 .loading-bar:nth-child(4) {
   animation-delay: 0.27s;
 }
+@keyframes loading {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1, 2.2);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
