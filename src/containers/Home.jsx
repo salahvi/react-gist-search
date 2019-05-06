@@ -42,7 +42,9 @@ class Home extends Component {
       isLoaded,
       isLoading,
       hasError,
-      isGistForkLoaded
+      isGistForkLoaded,
+      username,
+      gistError
     } = this.props.userGistList;
     const isDataEmpty = data.length === 0;
     return (
@@ -71,9 +73,10 @@ class Home extends Component {
           </div>
           <div className="search-list">
             <Loader show={isLoading} />
+            {isLoaded && <h3>Public gists by {username} </h3>}
             <ul>
               {isLoaded && isDataEmpty && <EmptyItem />}
-              {hasError && !isLoading && <ErrorItem />}
+              {hasError && !isLoading && <EmptyItem error={gistError} />}
               {isLoaded &&
                 !isDataEmpty &&
                 data.map(item => (

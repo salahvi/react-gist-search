@@ -6,7 +6,7 @@ const ErrorItem = () => {
       <div className="card">
         <div className="card-body">
           <div className="gist-item text-center">
-            Gists Couldn't Load, Please try again later!
+            Gists Failed to Load, Please try again later!
           </div>
         </div>
       </div>

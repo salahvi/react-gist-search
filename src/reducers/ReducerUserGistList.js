@@ -11,7 +11,9 @@ const initialState = {
   isLoading: false,
   isLoaded: false,
   isGistForkLoaded: false,
-  hasError: false
+  hasError: false,
+  gistError: "",
+  username: ""
 };
 
 export default function(state = initialState, action) {
@@ -21,18 +23,28 @@ export default function(state = initialState, action) {
         ...state,
         isLoading: true,
         isLoaded: false,
-        isGistForkLoaded: false
+        isGistForkLoaded: false,
+        forkError: ""
       };
     case FETCH_GIST_LIST_SUCCESS:
       return {
         ...state,
         isLoading: false,
         isLoaded: true,
-        data: action.payload,
-        isGistForkLoaded: false
+        data: action.payload.data,
+        username: action.payload.username,
+        isGistForkLoaded: false,
+        gistError: ""
       };
     case FETCH_GIST_LIST_FAILURE:
-      return { ...state, isLoading: false, isLoaded: false, hasError: true };
+      return {
+        ...state,
+        username: action.payload.username,
+        isLoading: false,
+        isLoaded: false,
+        hasError: true,
+        gistError: action.payload.error
+      };
     case FETCH_GIST_FORK_SUCCESS:
       return {
         ...state,
@@ -40,7 +52,11 @@ export default function(state = initialState, action) {
         data: addUserForks(state, action)
       };
     case FETCH_GIST_FORK_FAILURE:
-      return { ...state, isGistForkLoaded: false };
+      return {
+        ...state,
+        isGistForkLoaded: true,
+        data: addUserForks(state, action)
+      };
     default:
       break;
   }
@@ -50,7 +66,12 @@ export default function(state = initialState, action) {
 
 function addUserForks(state, action) {
   let data = state.data.map(item => {
-    if (item.id === action.payload.id && action.payload.data.length > 0) {
+    if (action.payload.error) {
+      item.forkFetchError = action.payload.error;
+    } else if (
+      item.id === action.payload.id &&
+      action.payload.data.length > 0
+    ) {
       item.forks = action.payload.data.slice(0, 3);
     }
     return item;

@@ -19,13 +19,17 @@ export function fetchUserGistList(username) {
       .then(response => {
         dispatch({
           type: FETCH_GIST_LIST_SUCCESS,
-          payload: response.data
+          payload: { data: response.data, username }
         });
       })
       .catch(err => {
+        const response =
+          err.response.status === 404
+            ? "Gist user not found!"
+            : " Gists Failed to Load, Please try again later!";
         dispatch({
           type: FETCH_GIST_LIST_FAILURE,
-          payload: err.response
+          payload: { error: response, username }
         });
       });
   };
@@ -45,7 +49,9 @@ export function fetchGitForks(id) {
       .catch(err => {
         dispatch({
           type: FETCH_GIST_FORK_FAILURE,
-          payload: err.response
+          payload: {
+            error: "Gist forks Failed to Load, Please try again later!"
+          }
         });
       });
   };
