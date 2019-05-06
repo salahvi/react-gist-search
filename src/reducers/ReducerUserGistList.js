@@ -5,7 +5,7 @@ import {
 } from "../constants/ActionType";
 
 const initialState = {
-  userGistList: "",
+  data: "",
   isLoading: false,
   isLoaded: false
 };
@@ -13,9 +13,14 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case FETCH_GIST_LIST_START:
-      return { ...state, ...action.payload };
+      return { ...state, isLoading: true, isLoaded: false };
     case FETCH_GIST_LIST_SUCCESS:
-      return { ...state, ...action.payload.data };
+      return {
+        ...state,
+        isLoading: false,
+        isLoaded: true,
+        data: action.payload
+      };
     case FETCH_GIST_LIST_FAILURE:
       return { ...state, isLoading: false, isLoaded: false };
     default:

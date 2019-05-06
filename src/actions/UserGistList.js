@@ -20,6 +20,7 @@ export function fetchUserGistList(username) {
           type: FETCH_GIST_LIST_SUCCESS,
           payload: response.data
         });
+        dispatch(fetchGitForks(response.data));
       })
       .catch(err => {
         dispatch({
@@ -28,4 +29,23 @@ export function fetchUserGistList(username) {
         });
       });
   };
+}
+
+function fetchGitForks(data) {
+  data.map(item => {
+    const url = `/gists/${item.id}/forks`;
+    return dispatch => {
+      axios
+        .get(apiUrl(url))
+        .then(response => {
+          console.log(response);
+        })
+        .catch(err => {
+          dispatch({
+            type: FETCH_GIST_LIST_FAILURE,
+            payload: err.response
+          });
+        });
+    };
+  });
 }
