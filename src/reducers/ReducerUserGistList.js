@@ -17,13 +17,19 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case FETCH_GIST_LIST_START:
-      return { ...state, isLoading: true, isLoaded: false };
+      return {
+        ...state,
+        isLoading: true,
+        isLoaded: false,
+        isGistForkLoaded: false
+      };
     case FETCH_GIST_LIST_SUCCESS:
       return {
         ...state,
         isLoading: false,
         isLoaded: true,
-        data: action.payload
+        data: action.payload,
+        isGistForkLoaded: false
       };
     case FETCH_GIST_LIST_FAILURE:
       return { ...state, isLoading: false, isLoaded: false, hasError: true };
