@@ -1,15 +1,25 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { fetchUserGistList } from "../actions/UserGistList";
+import { fetchUserGistList, fetchGitForks } from "../actions/UserGistList";
 import "../style/Home.css";
 import ListItem from "../components/ListItem";
 import EmptyItem from "../components/EmptyItem";
+import Loader from "../components/Loader";
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = { value: "" };
+  }
+
+  componentDidUpdate(prevProps) {
+    const { data, isLoaded, isGistForkLoaded } = this.props.userGistList;
+    if (prevProps.userGistList.data !== data && isLoaded && !isGistForkLoaded) {
+      data.map(item => {
+        this.props.fetchGitForks(item.id);
+      });
+    }
   }
 
   handleInputChange = event => {
@@ -20,13 +30,18 @@ class Home extends Component {
     event.preventDefault();
     let value = this.state.value;
     if (!value.trim()) {
-      return;
+      return "";
     }
-    this.props.getUserGists(value);
+    this.props.fetchUserGistList(value);
   }
 
   render() {
-    const { data, isLoaded, isLoading } = this.props.userGistList;
+    const {
+      data,
+      isLoaded,
+      isLoading,
+      isGistForkLoaded
+    } = this.props.userGistList;
     const isDataEmpty = data.length === 0;
     return (
       <div className="home-wrapper container-fluid">
@@ -34,9 +49,12 @@ class Home extends Component {
           <img src="/assets/logo.png" className="App-logo" alt="logo" />
         </div>
         <div className="content-wrapper">
-          <div className="search-from">
-            <form onSubmit={e => this.handleFormSubmit(e)}>
-              <div class="form-group">
+          <div className="search-form">
+            <form
+              onSubmit={e => this.handleFormSubmit(e)}
+              className="form-inline"
+            >
+              <div className="form-group">
                 <input
                   type="text"
                   className="search-input"
@@ -44,17 +62,24 @@ class Home extends Component {
                   onChange={e => this.handleInputChange(e)}
                 />
               </div>
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" className="btn btn-primary">
                 Search
               </button>
             </form>
           </div>
           <div className="search-list">
+            <Loader show={isLoading} />
             <ul>
               {isLoaded && isDataEmpty && <EmptyItem />}
               {isLoaded &&
                 !isDataEmpty &&
-                data.map(item => <ListItem item={item} key={item.id} />)}
+                data.map(item => (
+                  <ListItem
+                    item={item}
+                    isGistForkLoaded={isGistForkLoaded}
+                    key={item.id}
+                  />
+                ))}
             </ul>
           </div>
         </div>
@@ -68,7 +93,8 @@ const mapStateToProps = ({ userGistList }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchUserGistList: bindActionCreators(fetchUserGistList, dispatch)
+  fetchUserGistList: bindActionCreators(fetchUserGistList, dispatch),
+  fetchGitForks: bindActionCreators(fetchGitForks, dispatch)
 });
 
 export default connect(
