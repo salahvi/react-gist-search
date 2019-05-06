@@ -10,7 +10,8 @@ const initialState = {
   data: "",
   isLoading: false,
   isLoaded: false,
-  isGistForkLoaded: false
+  isGistForkLoaded: false,
+  hasError: false
 };
 
 export default function(state = initialState, action) {
@@ -25,7 +26,7 @@ export default function(state = initialState, action) {
         data: action.payload
       };
     case FETCH_GIST_LIST_FAILURE:
-      return { ...state, isLoading: false, isLoaded: false };
+      return { ...state, isLoading: false, isLoaded: false, hasError: true };
     case FETCH_GIST_FORK_SUCCESS:
       return {
         ...state,

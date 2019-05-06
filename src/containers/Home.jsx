@@ -41,6 +41,7 @@ class Home extends Component {
       data,
       isLoaded,
       isLoading,
+      hasError,
       isGistForkLoaded
     } = this.props.userGistList;
     const isDataEmpty = data.length === 0;
@@ -72,7 +73,7 @@ class Home extends Component {
             <Loader show={isLoading} />
             <ul>
               {isLoaded && isDataEmpty && <EmptyItem />}
-              {!isLoaded && !isLoading && <ErrorItem />}
+              {hasError && !isLoading && <ErrorItem />}
               {isLoaded &&
                 !isDataEmpty &&
                 data.map(item => (
