@@ -5,6 +5,7 @@ import { fetchUserGistList, fetchGitForks } from "../actions/UserGistList";
 import "../style/Home.css";
 import ListItem from "../components/ListItem";
 import EmptyItem from "../components/EmptyItem";
+import ErrorItem from "../components/ErrorItem";
 import Loader from "../components/Loader";
 
 class Home extends Component {
@@ -71,6 +72,7 @@ class Home extends Component {
             <Loader show={isLoading} />
             <ul>
               {isLoaded && isDataEmpty && <EmptyItem />}
+              {!isLoaded && !isLoading && <ErrorItem />}
               {isLoaded &&
                 !isDataEmpty &&
                 data.map(item => (
